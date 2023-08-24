@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generation and Date of Birth Selection</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  .container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Choose Your Generation:</h2>
+  <label><input type="radio" name="generation" value="baby_boomer"> Baby Boomer</label><br>
+  <label><input type="radio" name="generation" value="gen_x"> Generation X</label><br>
+  <label><input type="radio" name="generation" value="millennial"> Millennial</label><br>
+  <label><input type="radio" name="generation" value="gen_z"> Generation Z</label><br>
+
+  <h2>Select Your Date of Birth:</h2>
+  <input type="date" id="dobPicker"><br><br>
+
+  <button onclick="continueClicked()">Continue</button>
+</div>
+
+<script>
+function setYearRange(generation) {
+  const currentYear = new Date().getFullYear();
+  let startYear, endYear;
+
+  if (generation === 'baby_boomer') {
+    startYear = currentYear - 75;
+    endYear = currentYear - 56;
+  } else if (generation === 'gen_x') {
+    startYear = currentYear - 55;
+    endYear = currentYear - 41;
+  } else if (generation === 'millennial') {
+    startYear = currentYear - 40;
+    endYear = currentYear - 25;
+  } else if (generation === 'gen_z') {
+    startYear = currentYear - 24;
+    endYear = currentYear;
+  } else {
+    startYear = currentYear - 100; // Default value
+    endYear = currentYear;
+  }
+
+  document.getElementById('dobPicker').setAttribute('min', `${startYear}-01-01`);
+  document.getElementById('dobPicker').setAttribute('max', `${endYear}-12-31`);
+}
+
+function continueClicked() {
+  const selectedGeneration = document.querySelector('input[name="generation"]:checked');
+  const selectedDateOfBirth = document.getElementById('dobPicker').value;
+
+  if (!selectedGeneration) {
+    alert('Please select a generation.');
+  } else if (!selectedDateOfBirth) {
+    alert('Please select a date of birth.');
+  } else {
+    const generation = selectedGeneration.value;
+    const birthYear = new Date(selectedDateOfBirth).getFullYear();
+
+    let generationName = "";
+    if (birthYear <= new Date().getFullYear() - 75) {
+      generationName = "Silent Generation";
+    } else if (birthYear <= new Date().getFullYear() - 56) {
+      generationName = "Baby Boomer";
+    } else if (birthYear <= new Date().getFullYear() - 41) {
+      generationName = "Generation X";
+    } else if (birthYear <= new Date().getFullYear() - 25) {
+      generationName = "Millennial";
+    } else {
+      generationName = "Generation Z";
+    }
+
+    alert(`You belong to the ${generationName} generation and your date of birth is ${selectedDateOfBirth}.`);
+  }
+}
+
+document.querySelectorAll('input[name="generation"]').forEach(input => {
+  input.addEventListener('change', () => {
+    const selectedGeneration = document.querySelector('input[name="generation"]:checked');
+    if (selectedGeneration) {
+      setYearRange(selectedGeneration.value);
+    }
+  });
+});
+</script>
+</body>
+</html>
